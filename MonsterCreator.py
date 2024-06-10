@@ -7,33 +7,46 @@ import random
 class MonsterCreator:
 
     def createMonster(self):
-        health = random.randint(50, 100)
-        attack = random.randint(15, 30)
-        deffense = random.randint(0, 15)
-        #type = MonsterType(11)
+
+        str = random.randint(1, 10)
+        con = random.randint(1, 10)
+        dex = random.randint(1, 10)
+        per = random.randint(1, 10)
+        intel = random.randint(1, 10)
+        wis = random.randint(1, 10)
+
+        lv = random.randint(1, 20)
+
+
+
+        #type = MonsterType(1)
         type = MonsterType(random.randint(1, len(list(MonsterType))))
 
         match type:
             case MonsterType.HUMANOID:
-                name = HumanoidNames(random.randint(1, len(list(HumanoidNames)))).name.replace('_', ' ')
+                name = HumanoidNames(lv).name
             case MonsterType.UNDEAD:
-                name = UndeadNames(random.randint(1, len(list(UndeadNames)))).name.replace('_', ' ')
+                name = UndeadNames(lv).name
             case MonsterType.RADIANT:
-                name = RadiantNames(random.randint(1, len(list(RadiantNames)))).name.replace('_', ' ')
+                name = RadiantNames(lv).name
             case MonsterType.HELLISH:
-                name = HellishNames(random.randint(1, len(list(HellishNames)))).name.replace('_', ' ')
+                name = HellishNames(lv).name
             case MonsterType.VOID:
-                name = VoidNames(random.randint(1, len(list(VoidNames)))).name.replace('_', ' ')
+                name = VoidNames(lv).name
             case MonsterType.NATURE:
-                name = NatureNames(random.randint(1, len(list(NatureNames)))).name.replace('_', ' ')
+                name = NatureNames(lv).name
             case MonsterType.EARTH:
-                name = EarthNames(random.randint(1, len(list(EarthNames)))).name.replace('_',' ')
+                name = EarthNames(lv).name
             case MonsterType.WATER:
-                name = WaterNames(random.randint(1, len(list(WaterNames)))).name.replace('_', ' ').replace('PP', "'")
+                name = WaterNames(lv).name
             case MonsterType.FIRE:
-                name = FireNames(random.randint(1, len(list(FireNames)))).name.replace('_', ' ')
+                name = FireNames(lv).name
             case MonsterType.LIGHT:
-                name = LightNames(random.randint(1, len(list(LightNames)))).name.replace('_', ' ')
+                name = LightNames(lv).name
             case MonsterType.DARK:
-                name = DarkNames(random.randint(1, len(list(DarkNames)))).name.replace('_', ' ')
-        return Monster(name, health, attack, deffense, type)
+                name = DarkNames(lv).name
+
+        name = name.replace('_', ' ').replace('PP', "'")
+
+        return Monster(name, (lv//4) + 1, str, con, dex, per, intel, wis, type)
+
