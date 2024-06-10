@@ -6,7 +6,7 @@ import random
 
 class MonsterCreator:
 
-    def createMonster(self):
+    def createMonster(self, value = 'R'):
 
         str = random.randint(1, 10)
         con = random.randint(1, 10)
@@ -16,8 +16,6 @@ class MonsterCreator:
         wis = random.randint(1, 10)
 
         lv = random.randint(1, 20)
-
-
 
         #type = MonsterType(1)
         type = MonsterType(random.randint(1, len(list(MonsterType))))
@@ -48,5 +46,7 @@ class MonsterCreator:
 
         name = name.replace('_', ' ').replace('PP', "'")
 
-        return Monster(name, (lv//4) + 1, str, con, dex, per, intel, wis, type)
+        if isinstance(value, int) and value > 0 and value < 7:
+            return Monster(name, value, str, con, dex, per, intel, wis, type)
 
+        return Monster(name, (lv//4) + 1, str, con, dex, per, intel, wis, type)

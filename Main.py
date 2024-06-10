@@ -1,20 +1,14 @@
-from MonsterNames import *
-from MonsterTemplates import *
-from MonsterCreator import MonsterCreator
-from Arena import Arena
+from GameConsoleInterface import GameConsoleInterface
+
 import random
 
 
 if __name__ == '__main__':
 
-    mc = MonsterCreator()
-
-    for i in range(2):
-        print(mc.createMonster())
+     ng = GameConsoleInterface()
 
 
-    #arena = Arena(zombie1,zombie2)
-    #arena.fight()
+
 
 
 

@@ -1,4 +1,5 @@
 from MonsterTemplates.MonsterType import MonsterType
+import random
 
 class Monster:
     def __init__(self, name, lv, str, con, dex, per, intel, wis, type):
@@ -19,6 +20,7 @@ class Monster:
         #race base stats
         #stats calculated
         self.health = int(100*(1+((self.constitution+self.wisdom)/10)))
+        self.maxHealth = self.health
 
         self.strAttack = int(10*(1+(self.strenght*self.dexterity/20)))
         self.intAttack = int(10*(1+(self.intelligence*self.dexterity/20)))
@@ -26,9 +28,9 @@ class Monster:
         self.strDefense = int(10*(1+(self.constitution/10)))
         self.intDefense = int(10*(1+(self.wisdom)/10))
 
-
-        self.initiative = 0
-
+        #aditional stats
+        self.initiative = self.dexterity
+        self.experience = 0
 
 
 
@@ -46,5 +48,53 @@ class Monster:
 
         return string
 
-    def islAive(self):
-        return self.health > 0
+    def isAlive(self):
+        return  self.health >= 0
+
+    def rest(self):
+        self.health = self.maxHealth
+
+    def heal(self, value):
+        if self.health + value > self.maxHealth:
+            self.health = self.maxHealth
+        else:
+            self.health += value
+    def takePhysicalDamage(self, damage):
+        self.health -= (damage - self.strDefense)
+
+    def takeMagicalDamage(self, damage):
+        self.health -= (damage - self.intDefense)
+
+    def rollInitiative(self):
+        return random.randint(1,20) + self.initiative
+
+    def physicalAttack(self):
+        return self.strAttack
+    def magicalAttack(self):
+        return self.intAttack
+    def attackTypeSelector(self):
+        if self.physicalAttack()>=self.magicalAttack():
+            return "physical"
+        else:
+            return "magical"
+    def autoAttack(self, type):
+        match type:
+            case "physical":
+                return self.physicalAttack()
+            case "magical":
+                return self.magicalAttack()
+            case _:
+                return self.physicalAttack()
+
+    def autoDefense(self, type, damage):
+        match type:
+            case "physical":
+                return self.health - (damage-self.strDefense)
+            case "magical":
+                return self.health - (damage-self.intDefense)
+            case _:
+                return self.health - (damage - self.strDefense)
+    def levelUp(self):
+        if self.experience >= self.level*1000:
+            self.level +=1
+            print("LEVEL UP, now level is ", self.level)
