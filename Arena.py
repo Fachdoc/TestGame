@@ -43,7 +43,7 @@ class Arena:
                     mc = MonsterCreator()
                     enemy = mc.createMonster(int(value))
                     print(enemy)
-                case _:
+                case _, "":
                     print("Invalid input try again")
             print("==============================================")
             self.fight(enemy)
@@ -84,6 +84,9 @@ class Arena:
             print("Round ", counter+1," ==============================================")
             damage = 0
             type = ''
+
+            lastHp = gladiatorsList[(counter+1)%2].health
+
             if gladiatorsList[counter%2].name == self.monster1.name:
                 print("Choose your attack:")
                 print("1. physical(",self.monster1.physicalAttack(),")")
@@ -96,6 +99,8 @@ class Arena:
                     case '2':
                         type = 'magical'
                         damage = gladiatorsList[counter % 2].magicalAttack()
+
+
                 gladiatorsList[(counter + 1) % 2].autoDefense(type, damage)
 
 
@@ -103,17 +108,30 @@ class Arena:
                 damage = gladiatorsList[counter % 2].physicalAttack()
                 gladiatorsList[(counter + 1) % 2].takePhysicalDamage(damage)
 
-
-
-
-
-            print(gladiatorsList[counter%2].name, " hit ", gladiatorsList[(counter+1)%2].name, " with ", damage, " damage")
+            print(gladiatorsList[counter%2].name, " hit ", gladiatorsList[(counter+1)%2].name, " with ", type , " damage")
             print("Player ","=========================")
             print(self.monster1.name)
-            print(self.monster1.health)
+
+            damageTaken = 0
+
+            if gladiatorsList[(counter + 1)%2].name == self.monster1.name:
+                damageTaken = damage - self.monster1.returnDefence(type)
+                if damageTaken<0:
+                    damageTaken = 0
+                print(lastHp, "-", damageTaken, "(", damage, " - ", self.monster1.returnDefence(type), ") ->", self.monster1.health)
+            else :
+                print(self.monster1.health)
+
             print("Monster ", "=========================")
             print(monster2.name)
-            print(monster2.health)
+            if gladiatorsList[(counter + 1)%2].name == monster2.name:
+                damageTaken = damage-monster2.returnDefence(type)
+                if damageTaken<0:
+                    damageTaken = 0
+                print(lastHp, "-", damageTaken, "(", damage, " - ", monster2.returnDefence(type), ") ->", monster2.health)
+            else :
+                print(monster2.health)
+
             counter+=1
 
             print("=========================")
@@ -123,6 +141,8 @@ class Arena:
                 print("Player lost")
             if not monster2.isAlive():
                 print("Monster lost")
-                xp = (monster2.health + monster2.physicalAttac() + monster2.magicalAttack())*monster2.level
+                xp = (monster2.health + monster2.physicalAttack() + monster2.magicalAttack())*monster2.level
                 print("Player get ", xp," xp")
+                self.monster1.addXP(xp)
+                print("Player XP: ", self.monster1.experience, "/", self.monster1.level * 1000)
                 self.monster1.levelUp()

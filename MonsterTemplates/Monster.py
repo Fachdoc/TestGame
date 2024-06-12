@@ -60,10 +60,12 @@ class Monster:
         else:
             self.health += value
     def takePhysicalDamage(self, damage):
-        self.health -= (damage - self.strDefense)
+        if damage - self.strDefense >=0:
+            self.health -= (damage - self.strDefense)
 
     def takeMagicalDamage(self, damage):
-        self.health -= (damage - self.intDefense)
+        if damage - self.intDefense:
+            self.health -= (damage - self.intDefense)
 
     def rollInitiative(self):
         return random.randint(1,20) + self.initiative
@@ -89,12 +91,40 @@ class Monster:
     def autoDefense(self, type, damage):
         match type:
             case "physical":
-                return self.health - (damage-self.strDefense)
+                self.takePhysicalDamage(damage)
             case "magical":
-                return self.health - (damage-self.intDefense)
+                self.takeMagicalDamage(damage)
             case _:
-                return self.health - (damage - self.strDefense)
+                self.takePhysicalDamage(damage)
+
+    def returnDamageTaken(self, damage, type):
+        match type:
+            case "physical":
+                return damage - self.strDefens
+            case "magical":
+                return damage - self.intDefense
+            case _:
+                return damage - self.strDefens
+
+    def returnTakenPhysicalDamage(self, damage):
+        return damage-self.strDefense
+
+    def returnTakenMagicalDamage(self, damage):
+        return damage-self.intDefense
+
     def levelUp(self):
         if self.experience >= self.level*1000:
             self.level +=1
             print("LEVEL UP, now level is ", self.level)
+
+    def addXP(self, value):
+        self.experience += value
+
+    def returnDefence(self, type):
+        match type:
+            case "physical":
+                return self.strDefense
+            case "magical":
+                return self.intDefense
+            case _:
+                return self.strDefense
